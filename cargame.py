@@ -6,12 +6,23 @@ import random
 
 pygame.init()
 
-screen = pygame.display.set_mode((1000, 500))
+screen_x = 1000
+screen_y = 500
+quit_game = False
+
+screen = pygame.display.set_mode((screen_x, screen_y))
 pygame.display.set_caption("Car Vroom game")
 
 game_icon = pygame.image.load("game_icon.png")
 pygame.display.set_icon(game_icon)
 
+pygame.display.update()
+
+while not quit_game:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            quit_game = True
 
 pygame.quit()
 quit()
