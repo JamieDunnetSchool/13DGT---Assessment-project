@@ -6,8 +6,8 @@ import random
 
 pygame.init()
 
-screen_x = 1000
-screen_y = 500
+screen_x = 750
+screen_y = 800
 quit_game = False
 
 screen = pygame.display.set_mode((screen_x, screen_y))
@@ -23,6 +23,7 @@ while not quit_game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_game = True
+
 
 pygame.quit()
 quit()
