@@ -9,6 +9,8 @@ pygame.init()
 screen_x = 750
 screen_y = 800
 
+
+
 screen = pygame.display.set_mode((screen_x, screen_y))
 pygame.display.set_caption("Car Vroom game")
 
@@ -17,6 +19,7 @@ pygame.display.set_icon(game_icon)
 
 pygame.display.update()
 
+black = (140, 140, 140)
 
 quit_game = False
 score = 0
@@ -45,7 +48,7 @@ while not quit_game:
         if event.type == pygame.QUIT:
             quit_game = True
         
-        
+    screen.fill(black)
     show_score(textx, texty)
     pygame.display.update()
 
