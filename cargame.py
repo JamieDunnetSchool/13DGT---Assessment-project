@@ -48,17 +48,6 @@ def show_score(x, y):
     screen.blit(score_text, (x, y))
     screen.blit(hi_text, (x, y + 25))
 
-def message(msg, txt_colour, bkgd_colour):
-    txt = font.render(msg, True, txt_colour, bkgd_colour)
-    text_box = txt.get_rect(center=(500, 360))
-    screen.blit(txt, text_box)
-
-def show_score(x, y):
-    score_text = font.render("Score: " + str(score), True, (255, 255, 255))
-    hi_text = font.render("High: " + str(high_score), True, (255, 255, 255))
-    screen.blit(score_text, (x, y))
-    screen.blit(hi_text, (x, y + 55))
-
 def load_high_score():
     try:
         with open("highsocre.txt", "r") as hi_score_file:
@@ -88,11 +77,12 @@ class cactus:
         self.speed = speed
         self.points = points
 
-    def make_food(self):
-        cactu = pygame.Rect(self.cactus_x, self.cactus_y, self.w, self.h)
-        cac = pygame.image.load("cactus.png").convert_alpha()
-        resized_cac = pygame.transform.smoothscale(cac, [self.w, self.h])
-        screen.blit(resized_cac, cactu)
+    def make_cars(self):
+        cars = pygame.Rect(self.food_x, self.food_y, 20, 20)
+        cars_png = "apple_" + str(self.food_image)+".png"
+        colorcar = pygame.image.load(food_png).convert_alpha()
+        resized_apple = pygame.transform.smoothscale(apple, [20,20])
+        screen.blit(resized_apple, food)
 
     def hit(self, llama_x, llama_y, llama_w, llama_h):
         global game_ending, final_score, score
