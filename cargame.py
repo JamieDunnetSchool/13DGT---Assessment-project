@@ -29,6 +29,8 @@ car_x = 300
 car_y = 650
 car_h = 95 
 car_w = 150
+cars_y = 650
+cars_x = 150
 car_x_change = 0
 car_y_change = 0
 font = pygame.font.Font("freesansbold.ttf", 20)
@@ -67,66 +69,62 @@ def save_high_score(value):
 
 high_score = load_high_score()
 
-class cactus:
-    def __init__(self, cactus_x, cactus_y, name, w, h, speed, points):
-        self.cactus_x = cactus_x
-        self.cactus_y = cactus_y
-        self.name = name
-        self.w = w
-        self.h = h
-        self.speed = speed
+class cars:
+
+    def __init__(self, cars_x, cars_y, cars_image, points, name):
+        self.cars_x = cars_x
+        self.cars_y = cars_y
+        self.cars_image = cars_image
         self.points = points
+        self.name = name
 
     def make_cars(self):
-        cars = pygame.Rect(self.food_x, self.food_y, 20, 20)
-        cars_png = "apple_" + str(self.food_image)+".png"
-        colorcar = pygame.image.load(food_png).convert_alpha()
-        resized_apple = pygame.transform.smoothscale(apple, [20,20])
-        screen.blit(resized_apple, food)
+        cars = pygame.Rect(self.cars_x, self.cars_y, 20, 20)
+        cars_png = "cars_" + str(self.cars_image)+".png"
+        colorcars = pygame.image.load(cars_png).convert_alpha()
+        resized_cars = pygame.transform.smoothscale(cars, [20,20])
+        screen.blit(resized_cars, cars)
 
-    def hit(self, llama_x, llama_y, llama_w, llama_h):
-        global game_ending, final_score, score
-        self.cactus_x -= self.speed
-        cactus_rect = pygame.Rect(self.cactus_x, self.cactus_y, self.w, self.h)
-        llama_rect = pygame.Rect(llama_x, llama_y, llama_w, llama_h)
+    def eaten(self, snake_x, snake_y):
+        global snake_length, score
+        if snake_x == self.cars_x and snake_y == self.cars_y:
+            self.cars_x = cars_num(screen_x)
+            self.cars_y = cars_num(screen_y)
+            print("Got it!!")
+            snake_length +=1
+            score += self.points
+            print(self.name)
 
-        if llama_rect.colliderect(cactus_rect):
-            if game_ending == False:
-                final_score = int(time.time() - start_time) + pass_score
-                score = final_score
-            game_ending = True
+  
 
-        if self.cactus_x < -self.w:
-            self.cactus_x = 1000 + random.randint(200, 600)
-            return self.points
-        return 0
+def cars_num(pixel):
+    cars_loc = round(random.randrange(20, pixel - 20)/20)*20
+    return cars_loc
 
-def reset_game():
-    global llama_x, llama_y, llama_y_change, touch_ground, jump_lock
-    global score, pass_score, start_time, game_ending, final_score
-    global cactus1, cactus2, cactus3, cactus_list
+def game_loop():
+    global snake_length
+    quit_game = False
+    game_over = False
 
-    llama_x = 100
-    llama_y = 220
-    llama_y_change = 0
-    touch_ground = False
-    jump_lock = False
+    snake_x = 480
+    snake_y = 340
 
-    score = 0
-    pass_score = 0
-    final_score = 0
-    start_time = time.time()
-    game_ending = False
+    snake_x_change = 0
+    snake_y_change = 0
 
-    cactus1 = cactus(1200, cactus_y, "cactus1", cactus_w, cactus_h, 10, 1)
-    cactus2 = cactus(1600, cactus_y, "cactus2", cactus_w, cactus_h, 10, 1)
-    cactus3 = cactus(2000, cactus_y, "cactus3", cactus_w, cactus_h, 10, 1)
-    cactus_list = [cactus1, cactus2, cactus3]
+    snake_list = []
+    snake_length = 1
 
-cactus1 = cactus(1200, cactus_y, "cactus1", cactus_w, cactus_h, 10, 1)
-cactus2 = cactus(1600, cactus_y, "cactus2", cactus_w, cactus_h, 10, 1)
-cactus3 = cactus(2000, cactus_y, "cactus3", cactus_w, cactus_h, 10, 1)
-cactus_list = [cactus1, cactus2, cactus3]
+
+    cars1 = cars(cars_num(screen_x),cars_num(screen_y), 1, 10, "10pt Apple")
+    cars2 = cars(cars_num(screen_x),cars_num(screen_y), 2, 20, "20pt Apple")
+    cars3 = cars(cars_num(screen_x),cars_num(screen_y), 3, 30, "30pt Apple")
+    cars4 = cars(cars_num(screen_x),cars_num(screen_y), 4, 40, "40pt Apple")
+    cars5 = cars(cars_num(screen_x),cars_num(screen_y), 3, 50, "50pt Apple")
+    cars_list = [cars1, cars2,cars3,cars4,cars5]
+
+
+
 while not quit_game:
     #quit logic
     for event in pygame.event.get():
@@ -141,6 +139,7 @@ while not quit_game:
 
     car_x += car_x_change
     
+    #Bondries
     if car_x >= (screen_x -90):
             car_x = screen_x - 90
             car_x_change = 0 
@@ -153,12 +152,14 @@ while not quit_game:
     screen.fill(gray)
     show_score(textx, texty)
 
-    #Car Makeing
+    #Players Car Makeing
     car = pygame.Rect(car_x, car_y, car_h, car_w)
     carimage = pygame.image.load("car_1.png").convert_alpha()
     resized_car = pygame.transform.smoothscale(carimage, [car_h, car_w])
     screen.blit(resized_car, car)
     pygame.display.update()
+
+
 
     
 
