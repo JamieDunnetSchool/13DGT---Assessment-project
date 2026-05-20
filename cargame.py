@@ -71,57 +71,23 @@ high_score = load_high_score()
 
 class cars:
 
-    def __init__(self, cars_x, cars_y, cars_image, points, name):
+    def __init__(self, cars_x, cars_y, cars_image, name):
         self.cars_x = cars_x
         self.cars_y = cars_y
         self.cars_image = cars_image
-        self.points = points
         self.name = name
 
     def make_cars(self):
         cars = pygame.Rect(self.cars_x, self.cars_y, 20, 20)
-        cars_png = "cars_" + str(self.cars_image)+".png"
+        cars_png = "car_" + str(self.cars_image)+".png"
         colorcars = pygame.image.load(cars_png).convert_alpha()
-        resized_cars = pygame.transform.smoothscale(cars, [20,20])
+        resized_cars = pygame.transform.smoothscale(colorcars, [20,20])
         screen.blit(resized_cars, cars)
 
-    def eaten(self, snake_x, snake_y):
-        global snake_length, score
-        if snake_x == self.cars_x and snake_y == self.cars_y:
-            self.cars_x = cars_num(screen_x)
-            self.cars_y = cars_num(screen_y)
-            print("Got it!!")
-            snake_length +=1
-            score += self.points
-            print(self.name)
-
-  
 
 def cars_num(pixel):
     cars_loc = round(random.randrange(20, pixel - 20)/20)*20
     return cars_loc
-
-def game_loop():
-    global snake_length
-    quit_game = False
-    game_over = False
-
-    snake_x = 480
-    snake_y = 340
-
-    snake_x_change = 0
-    snake_y_change = 0
-
-    snake_list = []
-    snake_length = 1
-
-
-    cars1 = cars(cars_num(screen_x),cars_num(screen_y), 1, 10, "10pt Apple")
-    cars2 = cars(cars_num(screen_x),cars_num(screen_y), 2, 20, "20pt Apple")
-    cars3 = cars(cars_num(screen_x),cars_num(screen_y), 3, 30, "30pt Apple")
-    cars4 = cars(cars_num(screen_x),cars_num(screen_y), 4, 40, "40pt Apple")
-    cars5 = cars(cars_num(screen_x),cars_num(screen_y), 3, 50, "50pt Apple")
-    cars_list = [cars1, cars2,cars3,cars4,cars5]
 
 
 
@@ -130,6 +96,7 @@ while not quit_game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_game = True
+            
     
     if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
@@ -139,6 +106,13 @@ while not quit_game:
 
     car_x += car_x_change
     
+    cars1 = cars(cars_num(screen_x),cars_num(screen_y), 3, "Green Car")
+    cars2 = cars(cars_num(screen_x),cars_num(screen_y), 4, "Blue Car")
+    cars3 = cars(cars_num(screen_x),cars_num(screen_y), 4, "Orange Car")
+    cars4 = cars(cars_num(screen_x),cars_num(screen_y), 5, "Purple Car")
+    cars5 = cars(cars_num(screen_x),cars_num(screen_y), 6, "Sky Car")
+    cars_list = [cars1, cars2,cars3,cars4,cars5]
+
     #Bondries
     if car_x >= (screen_x -90):
             car_x = screen_x - 90
@@ -151,6 +125,9 @@ while not quit_game:
     #background and Score Gen
     screen.fill(gray)
     show_score(textx, texty)
+    for items in cars_list:
+            cars.make_cars(items)
+            
 
     #Players Car Makeing
     car = pygame.Rect(car_x, car_y, car_h, car_w)
@@ -158,11 +135,6 @@ while not quit_game:
     resized_car = pygame.transform.smoothscale(carimage, [car_h, car_w])
     screen.blit(resized_car, car)
     pygame.display.update()
-
-
-
-    
-
 
 pygame.quit()
 quit()
