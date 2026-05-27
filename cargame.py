@@ -15,10 +15,11 @@ screen = pygame.display.set_mode((screen_x, screen_y))
 pygame.display.set_caption("Car Vroom game")
 game_icon = pygame.image.load("game_icon.png")
 pygame.display.set_icon(game_icon)
-pygame.display.update()
+
 
 #Colors
 gray = (140, 140, 140)
+white = (255, 255, 255)
 
 quit_game = False
 score = 0
@@ -29,10 +30,14 @@ car_x = 300
 car_y = 650
 car_h = 95 
 car_w = 150
-cars_y = 650
-cars_x = 150
+cars_y = 0
+cars_x = 0
+cars_w = 150 
+cars_h = 95
 car_x_change = 0
 car_y_change = 0
+line_size_h = 2000
+line_size_w = 10
 font = pygame.font.Font("freesansbold.ttf", 20)
 
 # Text create
@@ -44,7 +49,7 @@ def message(msg, txt_colour, bkgd_colour):
 
 #Score Create
 def show_score(x, y):
-    """Return the lattuide and landutude values of the tQext."""
+    """Return the lattuide and landutude values of the text."""
     score_text = font.render("Score: " + str(score), True, (255, 255, 255))
     hi_text = font.render("High: " + str(high_score), True, (255, 255, 255))
     screen.blit(score_text, (x, y))
@@ -78,16 +83,17 @@ class cars:
         self.name = name
 
     def make_cars(self):
-        cars = pygame.Rect(self.cars_x, self.cars_y, 20, 20)
+        cars_rect = pygame.Rect(self.cars_x, self.cars_y, 0, 0)
         cars_png = "car_" + str(self.cars_image)+".png"
         colorcars = pygame.image.load(cars_png).convert_alpha()
-        resized_cars = pygame.transform.smoothscale(colorcars, [20,20])
-        screen.blit(resized_cars, cars)
+        resized_cars = pygame.transform.smoothscale(colorcars, [cars_h,cars_w])
+        pipe_flip = pygame.transform.flip(resized_cars, False, True)
+        screen.blit(pipe_flip, cars_rect)
 
 
-def cars_num(pixel):
-    cars_loc = round(random.randrange(20, pixel - 20)/20)*20
-    return cars_loc
+#def cars_num(pixel):
+    #cars_loc = round(random.randrange(20, pixel - 20))
+    #return cars_loc
 
 
 
@@ -98,19 +104,22 @@ while not quit_game:
             quit_game = True
             
     
-    if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                car_x_change = -5
-            elif event.key == pygame.K_RIGHT:
-                car_x_change = 5
+    keys = pygame.key.get_pressed()
+    car_x_change = 0
+    if keys[pygame.K_LEFT]:
+        car_x_change = - 5
+        car_y_change = 0
+    if keys[pygame.K_RIGHT]:
+        car_x_change = 5
+        car_y_change = 0
 
     car_x += car_x_change
     
-    cars1 = cars(cars_num(screen_x),cars_num(screen_y), 3, "Green Car")
-    cars2 = cars(cars_num(screen_x),cars_num(screen_y), 4, "Blue Car")
-    cars3 = cars(cars_num(screen_x),cars_num(screen_y), 4, "Orange Car")
-    cars4 = cars(cars_num(screen_x),cars_num(screen_y), 5, "Purple Car")
-    cars5 = cars(cars_num(screen_x),cars_num(screen_y), 6, "Sky Car")
+    cars1 = cars(175,40, 2, "Green Car")
+    cars2 = cars(350, 40, 3, "Blue Car")
+    cars3 = cars(525,40, 4, "Orange Car")
+    cars4 = cars(700,40, 5, "Purple Car")
+    cars5 = cars(0,0, 6, "Sky Car")
     cars_list = [cars1, cars2,cars3,cars4,cars5]
 
     #Bondries
@@ -125,8 +134,15 @@ while not quit_game:
     #background and Score Gen
     screen.fill(gray)
     show_score(textx, texty)
+
     for items in cars_list:
-            cars.make_cars(items)
+            items.make_cars()
+    
+    #lines
+    ground_rect = pygame.Rect(400,800  - line_size_h, line_size_w, line_size_h)
+    pygame.draw.rect(screen, white, ground_rect)
+
+
             
 
     #Players Car Makeing
