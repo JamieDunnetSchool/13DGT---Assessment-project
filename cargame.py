@@ -112,11 +112,13 @@ class cars:
             pygame.Rect(self.cars_x, self.cars_y, cars_h, cars_w)
         )
 
-cars1 = cars(random.choice(lanes), random.randint(-800, -100), 2, "Green Car", 10)
-cars2 = cars(random.choice(lanes), random.randint(-800, -100), 3, "Blue Car", 10)
-cars3 = cars(random.choice(lanes), random.randint(-800, -100), 4, "Orange Car", 10)
-cars4 = cars(random.choice(lanes), random.randint(-800, -100), 5, "Purple Car", 10)
-cars5 = cars(random.choice(lanes), random.randint(-1200, -900), 6, "Sky Car", 10)
+random.shuffle(lanes)
+
+cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", 10)
+cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", 10)
+cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", 10)
+cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", 10)
+cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", 10)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
 # Gameloop
@@ -157,7 +159,17 @@ while not quit_game:
 
         if items.cars_y > screen_y:
             items.cars_y = random.randint(-600, -150)
-            items.cars_x = random.choice(lanes)
+
+            used_lanes = [other.cars_x for other in cars_list if other != items]
+            free_lanes = [lane for lane in lanes if lane not in used_lanes]
+
+            if len(free_lanes) > 0:
+                items.cars_x = random.choice(free_lanes)
+            else:
+                items.cars_x = -500
+                
+            items.cars_image = random.randint(2, 6)
+
             score += 1
         
     # lines
