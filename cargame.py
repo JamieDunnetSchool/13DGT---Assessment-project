@@ -96,10 +96,10 @@ class cars:
         self.speed = speed
 
     def make_cars(self):
-        cars_rect = pygame.Rect(self.cars_x, self.cars_y, 0, 0)
+        cars_rect = pygame.Rect(self.cars_x, self.cars_y, cars_h, cars_w)
         cars_png = "car_" + str(self.cars_image)+".png"
         colorcars = pygame.image.load(cars_png).convert_alpha()
-        resized_cars = pygame.transform.smoothscale(colorcars, [cars_w, cars_h])
+        resized_cars = pygame.transform.smoothscale(colorcars, [cars_h, cars_w])
         pipe_flip = pygame.transform.flip(resized_cars, False, True)
         screen.blit(pipe_flip, cars_rect)
 
@@ -109,12 +109,8 @@ class cars:
     
     def collision(self, player_rect):
         return player_rect.colliderect(
-            pygame.Rect(self.cars_x, self.cars_y, cars_w, cars_h)
+            pygame.Rect(self.cars_x, self.cars_y, cars_h, cars_w)
         )
-
-#def cars_num(pixel):
-    #cars_loc = round(random.randrange(20, pixel - 20))
-    #return cars_loc
 
 cars1 = cars(random.choice(lanes), random.randint(-800, -100), 2, "Green Car", 10)
 cars2 = cars(random.choice(lanes), random.randint(-800, -100), 3, "Blue Car", 10)
@@ -125,36 +121,32 @@ cars_list = [cars1, cars2, cars3, cars4, cars5]
 
 # Gameloop
 while not quit_game:
-    # quit logic
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_game = True
             
     keys = pygame.key.get_pressed()
     car_x_change = 0
+
     if keys[pygame.K_LEFT]:
-        car_x_change = - 5
-        car_y_change = 0
+        car_x_change = -5
+
     if keys[pygame.K_RIGHT]:
         car_x_change = 5
-        car_y_change = 0
 
     car_x += car_x_change
 
     # Bondries
-    if car_x >= (screen_x -90):
-            car_x = screen_x - 90
-            car_x_change = 0 
+    if car_x >= (screen_x - 90):
+        car_x = screen_x - 90
 
     if car_x < 0:
         car_x = 0
-        car_x_change = 0
     
-    # background and Score Gen
     screen.fill(gray)
     show_score(textx, texty)
 
-    car = pygame.Rect(car_x, car_y, car_w, car_h)
+    car = pygame.Rect(car_x, car_y, car_h, car_w)
 
     for items in cars_list:
         items.make_cars()
@@ -169,22 +161,20 @@ while not quit_game:
             score += 1
         
     # lines
-    ground_rect = pygame.Rect(lane1_x,800  - line_size_h, line_size_w, 
-                              line_size_h)
+    ground_rect = pygame.Rect(lane1_x, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    ground_rect = pygame.Rect(lane2_x,800  - line_size_h, line_size_w, 
-                              line_size_h)
+    ground_rect = pygame.Rect(lane2_x, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    ground_rect = pygame.Rect(lane3_x,800  - line_size_h, line_size_w, 
-                              line_size_h)
+    ground_rect = pygame.Rect(lane3_x, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    # Players Car Makeing
+    # Players Car Making
     carimage = pygame.image.load("car_1.png").convert_alpha()
-    resized_car = pygame.transform.smoothscale(carimage, [car_w, car_h])
+    resized_car = pygame.transform.smoothscale(carimage, [car_h, car_w])
     screen.blit(resized_car, car)
+
     pygame.display.update()
 
 pygame.quit()
