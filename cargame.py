@@ -105,7 +105,6 @@ class cars:
 
     def move(self):
         self.cars_y += self.speed
-        print(f"{self.name} is at {self.cars_y}")
     
     def collision(self, player_rect):
         return player_rect.colliderect(
@@ -113,12 +112,14 @@ class cars:
         )
 
 random.shuffle(lanes)
+speed = random.randint(2, 6)
 
-cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", 10)
-cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", 10)
-cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", 10)
-cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", 10)
-cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", 10)
+
+cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", speed)
+cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", speed)
+cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", speed)
+cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", speed)
+cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", 3)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
 # Gameloop
@@ -167,8 +168,9 @@ while not quit_game:
                 items.cars_x = random.choice(free_lanes)
             else:
                 items.cars_x = -500
-                
+
             items.cars_image = random.randint(2, 6)
+            items.speed = random.randint(2, 6)
 
             score += 1
         
