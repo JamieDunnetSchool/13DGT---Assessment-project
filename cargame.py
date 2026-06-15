@@ -18,6 +18,7 @@ pygame.display.set_icon(game_icon)
 # Colors
 gray = (140, 140, 140)
 white = (255, 255, 255)
+green = (0,244,0)
 
 quit_game = False
 score = 0
@@ -119,7 +120,7 @@ cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", speed)
 cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", speed)
 cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", speed)
 cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", speed)
-cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", 3)
+cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", speed)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
 # Gameloop
@@ -183,6 +184,13 @@ while not quit_game:
 
     ground_rect = pygame.Rect(lane3_x, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
+
+    ground_rect = pygame.Rect(80, 800  - line_size_h, line_size_w, line_size_h)
+    pygame.draw.rect(screen, white, ground_rect)
+
+    ground_rect = pygame.Rect(41, 800 - line_size_h, line_size_w, line_size_h)
+    pygame.draw.rect(screen, green, ground_rect)
+
 
     # Players Car Making
     carimage = pygame.image.load("car_1.png").convert_alpha()
