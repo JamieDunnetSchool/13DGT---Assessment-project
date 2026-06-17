@@ -18,7 +18,7 @@ pygame.display.set_icon(game_icon)
 # Colors
 gray = (140, 140, 140)
 white = (255, 255, 255)
-green = (0,244,0)
+green = (34, 191, 37)
 
 quit_game = False
 score = 0
@@ -141,11 +141,11 @@ while not quit_game:
     car_x += car_x_change
 
     # Bondries
-    if car_x >= (screen_x - 90):
-        car_x = screen_x - 90
+    if car_x >= 670:
+        car_x = 670
 
-    if car_x < 0:
-        car_x = 0
+    if car_x < 80:
+        car_x = 80
     
     screen.fill(gray)
     show_score(textx, texty)
@@ -175,7 +175,7 @@ while not quit_game:
 
             score += 1
         
-    # lines
+    # Draws lines above screen
     ground_rect = pygame.Rect(lane1_x, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
@@ -188,7 +188,15 @@ while not quit_game:
     ground_rect = pygame.Rect(80, 800  - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    ground_rect = pygame.Rect(41, 800 - line_size_h, line_size_w, line_size_h)
+    ground_rect = pygame.Rect(670, 800  - line_size_h, line_size_w, line_size_h)
+    pygame.draw.rect(screen, white, ground_rect)
+
+
+    # Green Green Grass
+    ground_rect = pygame.Rect(0, 800 - line_size_h, 80, 2000)
+    pygame.draw.rect(screen, green, ground_rect)
+
+    ground_rect = pygame.Rect(680, 800 - line_size_h, 80, 2000)
     pygame.draw.rect(screen, green, ground_rect)
 
 
