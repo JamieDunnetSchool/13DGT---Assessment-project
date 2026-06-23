@@ -140,15 +140,14 @@ while not quit_game:
 
     car_x += car_x_change
 
+    screen.fill(gray)
+
     # Bondries
-    if car_x >= 670:
-        car_x = 670
+    if car_x >= 670 - 90:
+        car_x = 670 - 90
 
     if car_x < 80:
         car_x = 80
-    
-    screen.fill(gray)
-    show_score(textx, texty)
 
     car = pygame.Rect(car_x, car_y, car_h, car_w)
 
@@ -199,11 +198,18 @@ while not quit_game:
     ground_rect = pygame.Rect(680, 800 - line_size_h, 80, 2000)
     pygame.draw.rect(screen, green, ground_rect)
 
+    show_score(textx, texty)
+
 
     # Players Car Making
     carimage = pygame.image.load("car_1.png").convert_alpha()
     resized_car = pygame.transform.smoothscale(carimage, [car_h, car_w])
     screen.blit(resized_car, car)
+
+    # Write new high score i achived.
+    if score > high_score:
+        high_score = score
+    save_high_score(high_score)
 
     pygame.display.update()
 
