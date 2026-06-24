@@ -21,6 +21,7 @@ white = (255, 255, 255)
 green = (34, 191, 37)
 
 quit_game = False
+game_ending = False
 score = 0
 high_score = 0
 textx = 10
@@ -125,6 +126,34 @@ cars_list = [cars1, cars2, cars3, cars4, cars5]
 
 # Gameloop
 while not quit_game:
+
+    while game_ending == True:
+
+        if score > high_score:
+            high_score = score
+            save_high_score(high_score)
+
+        screen.fill(gray)
+        ground_rect = pygame.Rect(0, 500 - screen_x, screen_y, screen_x)
+        pygame.draw.rect(screen, green, ground_rect)
+        show_score(textx, texty)
+        message("You died! Press X to quit, C to play again", gray, white)
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit_game = True
+                game_ending = False
+                break
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_x:
+                    quit_game = True
+                    game_ending = False
+                    break
+                elif event.key == pygame.K_c:
+                    
+                    continue
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_game = True
@@ -156,7 +185,7 @@ while not quit_game:
         items.move()
 
         if items.collision(car):
-            quit_game = True
+            game_ending = True
 
         if items.cars_y > screen_y:
             items.cars_y = random.randint(-600, -150)
