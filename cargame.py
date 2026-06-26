@@ -1,4 +1,4 @@
-"""this program is a llama game for playing"""
+"""this program is a llama game for playing."""
 
 # Imports
 import pygame
@@ -31,7 +31,7 @@ font = pygame.font.Font("freesansbold.ttf", 20)
 # Players car variables
 car_x = 300
 car_y = 650
-car_h = 95 
+car_h = 95
 car_w = 150
 car_x_change = 0
 car_y_change = 0
@@ -39,7 +39,7 @@ car_y_change = 0
 # NPC car variables
 cars_y = 0
 cars_x = 0
-cars_w = 150 
+cars_w = 150
 cars_h = 95
 cars_y_change = 0
 
@@ -124,6 +124,28 @@ cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", speed)
 cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", speed)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
+def reset_game():
+    global car_x, car_y, car_y_change
+    global score, pass_score, game_ending, final_score
+    global cars1, cars2, cars3, cars4, cars5, cars_list
+
+    car_x = 300
+    car_y = 650
+    car_y_change = 0
+
+    cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", speed)
+    cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", speed)
+    cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", speed)
+    cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", speed)
+    cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", speed)
+    cars_list = [cars1, cars2, cars3, cars4, cars5]
+    
+    score = 0
+    pass_score = 0
+    final_score = 0
+
+    game_ending = False
+
 # Gameloop
 while not quit_game:
 
@@ -134,7 +156,7 @@ while not quit_game:
             save_high_score(high_score)
 
         screen.fill(gray)
-        ground_rect = pygame.Rect(0, 500 - screen_x, screen_y, screen_x)
+        ground_rect = pygame.Rect(0, 500 - screen_y, screen_x, screen_y)
         pygame.draw.rect(screen, green, ground_rect)
         show_score(textx, texty)
         message("You died! Press X to quit, C to play again", gray, white)
@@ -151,7 +173,7 @@ while not quit_game:
                     game_ending = False
                     break
                 elif event.key == pygame.K_c:
-                    
+                    reset_game()
                     continue
 
     for event in pygame.event.get():
