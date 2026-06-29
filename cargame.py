@@ -52,10 +52,10 @@ lane3_x = 525
 lanes = [110, 260, 410, 560]
 
 # Text create
-def message(msg, txt_colour, bkgd_colour):
+def message(msg, txt_colour, bkgd_colour, x_coward, y_corward):
     """Return the color and font values of the text."""
     txt = font.render(msg , True, txt_colour, bkgd_colour)
-    text_box = txt.get_rect(center=(144, 256))
+    text_box = txt.get_rect(center=(x_coward, y_corward))
     screen.blit(txt, text_box)
 
 # Score Create
@@ -156,10 +156,10 @@ while not quit_game:
             save_high_score(high_score)
 
         screen.fill(gray)
-        ground_rect = pygame.Rect(0, 500 - screen_y, screen_x, screen_y)
+        ground_rect = pygame.Rect(0, 750, screen_y, screen_x)
         pygame.draw.rect(screen, green, ground_rect)
         show_score(textx, texty)
-        message("You died! Press X to quit, C to play again", gray, white)
+        message("You died! Press X to quit, C to play again", gray, white, 375, 400)
         pygame.display.update()
 
         for event in pygame.event.get():
