@@ -16,11 +16,13 @@ game_icon = pygame.image.load("game_icon.png")
 pygame.display.set_icon(game_icon)
 
 # Colors
+black = (0, 0, 0)
 gray = (140, 140, 140)
 white = (255, 255, 255)
 green = (34, 191, 37)
 
 quit_game = False
+start_page = True
 game_ending = False
 score = 0
 high_score = 0
@@ -61,8 +63,8 @@ def message(msg, txt_colour, bkgd_colour, x_coward, y_corward):
 # Score Create
 def show_score(x, y):
     """Return the lattuide and landutude values of the text."""
-    score_text = font.render("Score: " + str(score), True, (255, 255, 255))
-    hi_text = font.render("High: " + str(high_score), True, (255, 255, 255))
+    score_text = font.render("Score: " + str(score), True, (black))
+    hi_text = font.render("High: " + str(high_score), True, (black))
     screen.blit(score_text, (x, y))
     screen.blit(hi_text, (x, y + 25))
 
@@ -116,7 +118,6 @@ class cars:
 random.shuffle(lanes)
 speed = random.randint(2, 6)
 
-
 cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", speed)
 cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", speed)
 cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", speed)
@@ -133,6 +134,8 @@ def reset_game():
     car_y = 650
     car_y_change = 0
 
+    random.shuffle(lanes)
+
     cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", speed)
     cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", speed)
     cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", speed)
@@ -148,6 +151,34 @@ def reset_game():
 
 # Gameloop
 while not quit_game:
+
+    while start_page == True:
+
+        screen.fill(gray)
+
+        ground_rect = pygame.Rect(0, 750, screen_y, screen_x)
+        pygame.draw.rect(screen, green, ground_rect)
+
+        message("Car Vroom Game", gray, white, 375, 300)
+        message("Press SPACE to start", gray, white, 375, 360)
+        message("Use LEFT and RIGHT arrows to move", gray, white, 375, 420)
+        message("Press X to quit", gray, white, 375, 480)
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit_game = True
+                start_page = False
+                break
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    start_page = False
+                    reset_game()
+                if event.key == pygame.K_x:
+                    quit_game = True
+                    start_page = False
+                    break
 
     while game_ending == True:
 
@@ -241,7 +272,6 @@ while not quit_game:
     ground_rect = pygame.Rect(670, 800  - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-
     # Green Green Grass
     ground_rect = pygame.Rect(0, 800 - line_size_h, 80, 2000)
     pygame.draw.rect(screen, green, ground_rect)
@@ -251,13 +281,12 @@ while not quit_game:
 
     show_score(textx, texty)
 
-
     # Players Car Making
     carimage = pygame.image.load("car_1.png").convert_alpha()
     resized_car = pygame.transform.smoothscale(carimage, [car_h, car_w])
     screen.blit(resized_car, car)
 
-    # Write new high score i achived.
+    # Write new high score I achived.
     if score > high_score:
         high_score = score
     save_high_score(high_score)
