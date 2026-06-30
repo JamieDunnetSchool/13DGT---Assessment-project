@@ -56,15 +56,15 @@ lanes = [110, 260, 410, 560]
 # Text create
 def message(msg, txt_colour, bkgd_colour, x_coward, y_corward):
     """Return the color and font values of the text."""
-    txt = font.render(msg , True, txt_colour, bkgd_colour)
+    txt = font.render(msg, True, txt_colour, bkgd_colour)
     text_box = txt.get_rect(center=(x_coward, y_corward))
     screen.blit(txt, text_box)
 
 # Score Create
 def show_score(x, y):
     """Return the lattuide and landutude values of the text."""
-    score_text = font.render("Score: " + str(score), True, (black))
-    hi_text = font.render("High: " + str(high_score), True, (black))
+    score_text = font.render("Score: " + str(score), True, black)
+    hi_text = font.render("High: " + str(high_score), True, black)
     screen.blit(score_text, (x, y))
     screen.blit(hi_text, (x, y + 25))
 
@@ -101,7 +101,7 @@ class cars:
 
     def make_cars(self):
         cars_rect = pygame.Rect(self.cars_x, self.cars_y, cars_h, cars_w)
-        cars_png = "car_" + str(self.cars_image)+".png"
+        cars_png = "car_" + str(self.cars_image) + ".png"
         colorcars = pygame.image.load(cars_png).convert_alpha()
         resized_cars = pygame.transform.smoothscale(colorcars, [cars_h, cars_w])
         pipe_flip = pygame.transform.flip(resized_cars, False, True)
@@ -111,18 +111,32 @@ class cars:
         self.cars_y += self.speed
     
     def collision(self, player_rect):
-        return player_rect.colliderect(
-            pygame.Rect(self.cars_x, self.cars_y, cars_h, cars_w)
-        )
+        npc_rect = pygame.Rect(self.cars_x + 8, self.cars_y + 8, cars_h - 16, cars_w - 16)
+        return player_rect.colliderect(npc_rect)
+
+def safe_spawn_lane(current_car, new_y):
+    blocked_lanes = []
+
+    for other in cars_list:
+        if other != current_car:
+            if abs(other.cars_y - new_y) < 330:
+                blocked_lanes.append(other.cars_x)
+
+    free_lanes = [lane for lane in lanes if lane not in blocked_lanes]
+
+    if len(free_lanes) > 1:
+        return random.choice(free_lanes)
+    else:
+        return -500
 
 random.shuffle(lanes)
-speed = random.randint(2, 6)
+speed = random.randint(3, 5)
 
-cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", speed)
-cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", speed)
-cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", speed)
-cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", speed)
-cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", speed)
+cars1 = cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
+cars2 = cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
+cars3 = cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
+cars4 = cars(lanes[3], random.randint(-1500, -1300), 5, "Purple Car", speed)
+cars5 = cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
 def reset_game():
@@ -136,11 +150,11 @@ def reset_game():
 
     random.shuffle(lanes)
 
-    cars1 = cars(lanes[0], random.randint(-800, -100), 2, "Green Car", speed)
-    cars2 = cars(lanes[1], random.randint(-800, -100), 3, "Blue Car", speed)
-    cars3 = cars(lanes[2], random.randint(-800, -100), 4, "Orange Car", speed)
-    cars4 = cars(lanes[3], random.randint(-800, -100), 5, "Purple Car", speed)
-    cars5 = cars(-500, random.randint(-1200, -900), 6, "Sky Car", speed)
+    cars1 = cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
+    cars2 = cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
+    cars3 = cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
+    cars4 = cars(lanes[3], random.randint(-1500, -1300), 5, "Purple Car", speed)
+    cars5 = cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
     cars_list = [cars1, cars2, cars3, cars4, cars5]
     
     score = 0
@@ -231,7 +245,7 @@ while not quit_game:
     if car_x < 80:
         car_x = 80
 
-    car = pygame.Rect(car_x, car_y, car_h, car_w)
+    car = pygame.Rect(car_x + 8, car_y + 8, car_h - 16, car_w - 16)
 
     for items in cars_list:
         items.make_cars()
@@ -241,18 +255,11 @@ while not quit_game:
             game_ending = True
 
         if items.cars_y > screen_y:
-            items.cars_y = random.randint(-600, -150)
-
-            used_lanes = [other.cars_x for other in cars_list if other != items]
-            free_lanes = [lane for lane in lanes if lane not in used_lanes]
-
-            if len(free_lanes) > 0:
-                items.cars_x = random.choice(free_lanes)
-            else:
-                items.cars_x = -500
+            items.cars_y = random.randint(-800, -300)
+            items.cars_x = safe_spawn_lane(items, items.cars_y)
 
             items.cars_image = random.randint(2, 6)
-            items.speed = random.randint(2, 6)
+            items.speed = speed
 
             score += 1
         
@@ -266,10 +273,10 @@ while not quit_game:
     ground_rect = pygame.Rect(lane3_x, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    ground_rect = pygame.Rect(80, 800  - line_size_h, line_size_w, line_size_h)
+    ground_rect = pygame.Rect(80, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    ground_rect = pygame.Rect(670, 800  - line_size_h, line_size_w, line_size_h)
+    ground_rect = pygame.Rect(670, 800 - line_size_h, line_size_w, line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
     # Green Green Grass
@@ -284,7 +291,8 @@ while not quit_game:
     # Players Car Making
     carimage = pygame.image.load("car_1.png").convert_alpha()
     resized_car = pygame.transform.smoothscale(carimage, [car_h, car_w])
-    screen.blit(resized_car, car)
+    player_car = pygame.Rect(car_x, car_y, car_h, car_w)
+    screen.blit(resized_car, player_car)
 
     # Write new high score I achived.
     if score > high_score:
