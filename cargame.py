@@ -53,6 +53,9 @@ lane2_x = 375
 lane3_x = 525
 lanes = [110, 260, 410, 560]
 
+# Speed variable
+speed = random.randint(3, 5)
+
 # Text create
 def message(msg, txt_colour, bkgd_colour, x_coward, y_corward):
     """Return the color and font values of the text."""
@@ -115,27 +118,31 @@ class cars:
         return player_rect.colliderect(npc_rect)
 
 def safe_spawn_lane(current_car, new_y):
+
     blocked_lanes = []
 
     for other in cars_list:
         if other != current_car:
-            if abs(other.cars_y - new_y) < 330:
+            if other.cars_x in lanes:
                 blocked_lanes.append(other.cars_x)
 
     free_lanes = [lane for lane in lanes if lane not in blocked_lanes]
 
-    if len(free_lanes) > 1:
-        return random.choice(free_lanes)
-    else:
+    # Only allow 3 lanes full at once
+    if len(free_lanes) <= 1:
         return -500
 
+    if len(free_lanes) > 0:
+        return random.choice(free_lanes)
+
+    return -500
+
 random.shuffle(lanes)
-speed = random.randint(3, 5)
 
 cars1 = cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
 cars2 = cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
 cars3 = cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
-cars4 = cars(lanes[3], random.randint(-1500, -1300), 5, "Purple Car", speed)
+cars4 = cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
 cars5 = cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
@@ -143,6 +150,7 @@ def reset_game():
     global car_x, car_y, car_y_change
     global score, pass_score, game_ending, final_score
     global cars1, cars2, cars3, cars4, cars5, cars_list
+    global speed
 
     car_x = 300
     car_y = 650
@@ -150,10 +158,12 @@ def reset_game():
 
     random.shuffle(lanes)
 
+    speed = random.randint(3, 5)
+
     cars1 = cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
     cars2 = cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
     cars3 = cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
-    cars4 = cars(lanes[3], random.randint(-1500, -1300), 5, "Purple Car", speed)
+    cars4 = cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
     cars5 = cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
     cars_list = [cars1, cars2, cars3, cars4, cars5]
     
@@ -256,10 +266,12 @@ while not quit_game:
 
         if items.cars_y > screen_y:
             items.cars_y = random.randint(-800, -300)
-            items.cars_x = safe_spawn_lane(items, items.cars_y)
 
-            items.cars_image = random.randint(2, 6)
+            speed = random.randint(3, 5)
             items.speed = speed
+
+            items.cars_x = safe_spawn_lane(items, items.cars_y)
+            items.cars_image = random.randint(2, 6)
 
             score += 1
         
