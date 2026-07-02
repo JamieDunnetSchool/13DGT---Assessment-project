@@ -131,13 +131,14 @@ class Cars:
         self.cars_y += self.speed
 
     def collision(self, player_rect):
-        """"""
+        """Initialise Collisions with players car."""
         npc_rect = pygame.Rect(self.cars_x + 8, self.cars_y + 8, cars_h - 16,
                                cars_w - 16)
         return player_rect.colliderect(npc_rect)
 
-def safe_spawn_lane(current_car, new_y):
 
+def safe_spawn_lane(current_car, new_y):
+    """Initialise Cars in doable spots."""
     blocked_lanes = []
 
     for other in cars_list:
@@ -156,6 +157,7 @@ def safe_spawn_lane(current_car, new_y):
 
     return -500
 
+
 random.shuffle(lanes)
 
 cars1 = Cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
@@ -165,7 +167,9 @@ cars4 = Cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
 cars5 = Cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
+
 def reset_game():
+    """Return the game start when death occurces."""
     global car_x, car_y, car_y_change
     global score, pass_score, game_ending, final_score
     global cars1, cars2, cars3, cars4, cars5, cars_list
@@ -185,17 +189,18 @@ def reset_game():
     cars4 = Cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
     cars5 = Cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
     cars_list = [cars1, cars2, cars3, cars4, cars5]
-    
+
     score = 0
     pass_score = 0
     final_score = 0
 
     game_ending = False
 
+
 # Gameloop
 while not quit_game:
 
-    while start_page == True:
+    while start_page is True:
 
         screen.fill(gray)
 
@@ -223,7 +228,7 @@ while not quit_game:
                     start_page = False
                     break
 
-    while game_ending == True:
+    while game_ending is True:
 
         if score > high_score:
             high_score = score
@@ -233,7 +238,8 @@ while not quit_game:
         ground_rect = pygame.Rect(0, 750, screen_y, screen_x)
         pygame.draw.rect(screen, green, ground_rect)
         show_score(textx, texty)
-        message("You died! Press X to quit, C to play again", gray, white, 375, 400)
+        message("You died! Press X to quit, C to play again", gray, white, 375,
+                400)
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -253,7 +259,7 @@ while not quit_game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_game = True
-            
+
     keys = pygame.key.get_pressed()
     car_x_change = 0
 
@@ -293,15 +299,18 @@ while not quit_game:
             items.cars_image = random.randint(2, 6)
 
             score += 1
-        
+
     # Draws lines above screen
-    ground_rect = pygame.Rect(lane1_x, 800 - line_size_h, line_size_w, line_size_h)
+    ground_rect = pygame.Rect(lane1_x, 800 - line_size_h, line_size_w,
+                              line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    ground_rect = pygame.Rect(lane2_x, 800 - line_size_h, line_size_w, line_size_h)
+    ground_rect = pygame.Rect(lane2_x, 800 - line_size_h, line_size_w,
+                              line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
-    ground_rect = pygame.Rect(lane3_x, 800 - line_size_h, line_size_w, line_size_h)
+    ground_rect = pygame.Rect(lane3_x, 800 - line_size_h, line_size_w,
+                              line_size_h)
     pygame.draw.rect(screen, white, ground_rect)
 
     ground_rect = pygame.Rect(80, 800 - line_size_h, line_size_w, line_size_h)
