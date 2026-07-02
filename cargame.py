@@ -57,6 +57,8 @@ lanes = [110, 260, 410, 560]
 speed = random.randint(3, 5)
 
 # Text create
+
+
 def message(msg, txt_colour, bkgd_colour, x_coward, y_corward):
     """Return the color and font values of the text."""
     txt = font.render(msg, True, txt_colour, bkgd_colour)
@@ -64,6 +66,8 @@ def message(msg, txt_colour, bkgd_colour, x_coward, y_corward):
     screen.blit(txt, text_box)
 
 # Score Create
+
+
 def show_score(x, y):
     """Return the lattuide and landutude values of the text."""
     score_text = font.render("Score: " + str(score), True, black)
@@ -72,7 +76,10 @@ def show_score(x, y):
     screen.blit(hi_text, (x, y + 25))
 
 # Import high score
+
+
 def load_high_score():
+    """Return this highscore to this file."""
     try:
         with open("highsocre.txt", "r") as hi_score_file:
             value = hi_score_file.read().strip()
@@ -86,16 +93,23 @@ def load_high_score():
     return int(value)
 
 # Export highscore
+
+
 def save_high_score(value):
+    """Return this saves the high score back to the file."""
     with open("highsocre.txt", "w") as hi_score_file:
         hi_score_file.write(str(value))
 
-high_score = load_high_score()
 
+high_score = load_high_score()
 # NPC car creating
-class cars:
+
+
+class Cars:
+    """Represents the NPC cars the player dogdes."""
 
     def __init__(self, cars_x, cars_y, cars_image, name, speed):
+        """Initialise objects."""
         self.cars_x = cars_x
         self.cars_y = cars_y
         self.cars_image = cars_image
@@ -103,18 +117,23 @@ class cars:
         self.speed = speed
 
     def make_cars(self):
+        """Generate Cars."""
         cars_rect = pygame.Rect(self.cars_x, self.cars_y, cars_h, cars_w)
         cars_png = "car_" + str(self.cars_image) + ".png"
         colorcars = pygame.image.load(cars_png).convert_alpha()
-        resized_cars = pygame.transform.smoothscale(colorcars, [cars_h, cars_w])
+        resized_cars = pygame.transform.smoothscale(colorcars,
+                                                    [cars_h, cars_w])
         pipe_flip = pygame.transform.flip(resized_cars, False, True)
         screen.blit(pipe_flip, cars_rect)
 
     def move(self):
+        """Initialise objects to move."""
         self.cars_y += self.speed
-    
+
     def collision(self, player_rect):
-        npc_rect = pygame.Rect(self.cars_x + 8, self.cars_y + 8, cars_h - 16, cars_w - 16)
+        """"""
+        npc_rect = pygame.Rect(self.cars_x + 8, self.cars_y + 8, cars_h - 16,
+                               cars_w - 16)
         return player_rect.colliderect(npc_rect)
 
 def safe_spawn_lane(current_car, new_y):
@@ -139,11 +158,11 @@ def safe_spawn_lane(current_car, new_y):
 
 random.shuffle(lanes)
 
-cars1 = cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
-cars2 = cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
-cars3 = cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
-cars4 = cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
-cars5 = cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
+cars1 = Cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
+cars2 = Cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
+cars3 = Cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
+cars4 = Cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
+cars5 = Cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
 cars_list = [cars1, cars2, cars3, cars4, cars5]
 
 def reset_game():
@@ -160,11 +179,11 @@ def reset_game():
 
     speed = random.randint(3, 5)
 
-    cars1 = cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
-    cars2 = cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
-    cars3 = cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
-    cars4 = cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
-    cars5 = cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
+    cars1 = Cars(lanes[0], random.randint(-300, -100), 2, "Green Car", speed)
+    cars2 = Cars(lanes[1], random.randint(-700, -500), 3, "Blue Car", speed)
+    cars3 = Cars(lanes[2], random.randint(-1100, -900), 4, "Orange Car", speed)
+    cars4 = Cars(-500, random.randint(-1500, -1300), 5, "Purple Car", speed)
+    cars5 = Cars(-500, random.randint(-1900, -1700), 6, "Sky Car", speed)
     cars_list = [cars1, cars2, cars3, cars4, cars5]
     
     score = 0
