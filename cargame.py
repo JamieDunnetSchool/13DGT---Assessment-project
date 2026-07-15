@@ -232,9 +232,7 @@ while not quit_game:
 
     while game_ending is True:
 
-        if score > high_score:
-            high_score = score
-            new_high_score = True
+        if new_high_score is True:
             save_high_score(high_score)
 
         screen.fill(gray)
@@ -298,6 +296,11 @@ while not quit_game:
             game_ending = True
 
         if items.cars_y > screen_y:
+
+            # Only count the car once if it passed through a lane
+            if items.cars_x in lanes:
+                score += 1
+
             items.cars_y = random.randint(-800, -300)
 
             speed = random.randint(3, 5)
@@ -305,8 +308,6 @@ while not quit_game:
 
             items.cars_x = safe_spawn_lane(items, items.cars_y)
             items.cars_image = random.randint(2, 6)
-
-            score += 1
 
     # Draws lines above screen
     ground_rect = pygame.Rect(lane1_x, 800 - line_size_h, line_size_w,
@@ -345,7 +346,8 @@ while not quit_game:
     # Write new high score I achived.
     if score > high_score:
         high_score = score
-    save_high_score(high_score)
+        new_high_score = True
+        save_high_score(high_score)
 
     pygame.display.update()
 
