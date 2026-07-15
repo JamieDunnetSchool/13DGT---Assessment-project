@@ -26,6 +26,7 @@ start_page = True
 game_ending = False
 score = 0
 high_score = 0
+new_high_score = False
 textx = 10
 texty = 10
 font = pygame.font.Font("freesansbold.ttf", 20)
@@ -173,7 +174,7 @@ def reset_game():
     global car_x, car_y, car_y_change
     global score, pass_score, game_ending, final_score
     global cars1, cars2, cars3, cars4, cars5, cars_list
-    global speed
+    global speed, new_high_score
 
     car_x = 300
     car_y = 650
@@ -193,6 +194,7 @@ def reset_game():
     score = 0
     pass_score = 0
     final_score = 0
+    new_high_score = False
 
     game_ending = False
 
@@ -207,10 +209,10 @@ while not quit_game:
         ground_rect = pygame.Rect(0, 750, screen_y, screen_x)
         pygame.draw.rect(screen, green, ground_rect)
 
-        message("Car Vroom Game", gray, white, 375, 300)
-        message("Press SPACE to start", gray, white, 375, 360)
-        message("Use LEFT and RIGHT arrows to move", gray, white, 375, 420)
-        message("Press X to quit", gray, white, 375, 480)
+        message("Car Vroom Game", black, gray, 375, 300)
+        message("Press SPACE to start", black, gray, 375, 360)
+        message("Use LEFT and RIGHT arrows to move", black, gray, 375, 420)
+        message("Press X to quit", black, gray, 375, 480)
 
         pygame.display.update()
 
@@ -232,14 +234,20 @@ while not quit_game:
 
         if score > high_score:
             high_score = score
+            new_high_score = True
             save_high_score(high_score)
 
         screen.fill(gray)
         ground_rect = pygame.Rect(0, 750, screen_y, screen_x)
         pygame.draw.rect(screen, green, ground_rect)
         show_score(textx, texty)
-        message("You died! Press X to quit, C to play again", gray, white, 375,
+
+        message("You died! Press X to quit, C to play again", black, gray, 375,
                 400)
+
+        if new_high_score is True:
+            message("New High Score!", black, gray, 375, 450)
+
         pygame.display.update()
 
         for event in pygame.event.get():
